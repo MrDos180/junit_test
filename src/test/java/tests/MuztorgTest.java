@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import pages.MainPage;
@@ -47,5 +48,18 @@ public class MuztorgTest extends TestBase {
     void checkSearchResult(String productName) {
         mainPage.searchProduct(productName);
         searchResultPage.verifySearchResult(productName);
+    }
+
+    @CsvSource({
+            "YAMAHA F310, 19 890",
+            "KRK RP5G4, 22 500",
+            "FOCUSRITE Scarlett 18i8 3rd Gen, 50 900"
+    })
+    @DisplayName("Проверка соотвествия что товар {0} соотвествует заявленной цене {1}")
+    @ParameterizedTest
+    void checkProductPrice(String productName, String price){
+        mainPage.searchProduct(productName);
+        searchResultPage.clickOnSearchProduct(productName)
+                        .verifyProductPrice(productName,price);
     }
 }
